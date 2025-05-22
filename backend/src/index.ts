@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import Database from "./config/database";
 import ChatRouter from "./router/ChatRouter";
 import cors from "cors"; 
+import AuthRouters from "./router/AuthRouters";
 
 class App {
   public app: Application;
@@ -35,6 +36,8 @@ class App {
       res.send("welcome home");
     });
     this.app.use("/api/chat", ChatRouter);
+    this.app.use("/api/auth", AuthRouters);
+
   }
 }
 
