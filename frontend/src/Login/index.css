@@ -1,0 +1,47 @@
+.wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.sceen{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 20%;
+    align-items: center;
+    gap: 10px;
+    height : 100%;
+    position: relative;
+    top: 250px;
+}
+
+.input-path{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 400px;
+    
+}
+
+.input-path input{
+    width: 250px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.input-path p {
+    font-size: 15px;
+}
+
+.sceen .label {
+    font-size: 25px;
+}
+
+button { 
+    font-size: 15px;
+    width: 300px;
+    background-color: beige;
+}
