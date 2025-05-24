@@ -8,8 +8,8 @@ const App: React.FC = () => {
   
 
   return (
-  //  <Chat/>
-    <Login/>
+   <Chat/>
+    // <Login/>
   );
 };
 

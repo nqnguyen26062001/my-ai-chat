@@ -1,30 +1,51 @@
-import { CreatedAt, UpdatedAt } from "sequelize-typescript";
-import {Chat} from "../model/Chat"
-import { User } from "../model/User";
-import bcrypt from 'bcryptjs';
-import { Op } from 'sequelize';
+// src/services/userService.ts
+import { User } from '../model/User'; // Import the User model class itself
+import { UniqueConstraintError } from 'sequelize';
+import { Op } from 'sequelize'; // Import Op for Sequelize operators
 
 interface IAuthRepository {
-    login(user: loginDTo):Promise<User>;
+    findUserByUsernameOrEmail(identifier: string): Promise<User | null> ;
+    findUserByUsername(username: string): Promise<User | null>;
+    findUserByEmail(email: string): Promise<User | null>;
+}
+class authRepository  implements IAuthRepository {
+   async findUserByUsernameOrEmail(identifier: string): Promise<User | null> {
+    try {
+      return await User.findOne({
+        where: {
+          [Op.or]: [ // Use Sequelize's OR operator
+            { username: identifier },
+            { email: identifier.toLowerCase() } // Always store/compare emails in lowercase
+          ]
+        }
+      });
+    } catch (error: any) {
+      console.error(`Error finding user by identifier '${identifier}':`, error.message);
+      throw new Error(`Failed to find user by identifier: ${error.message}`);
+    }
+  }
+
+   async findUserByUsername(username: string): Promise<User | null> {
+    try {
+      return await User.findOne({
+        where: { username: username }
+      });
+    } catch (error: any) {
+      console.error(`Error finding user by username '${username}':`, error.message);
+      throw new Error(`Failed to find user by username: ${error.message}`);
+    }
+  }
+
+   async findUserByEmail(email: string): Promise<User | null> {
+    try {
+      return User.findOne({
+        where: { email: email.toLowerCase() }
+      });
+    } catch (error: any) {
+      console.error(`Error finding user by email '${email}':`, error.message);
+      throw new Error(`Failed to find user by email: ${error.message}`);
+    }
+  }
 }
 
-export class AuthRepository implements IAuthRepository {
-    async login(user: loginDTo):Promise<User> {
-        try{
-            if (user.userNameOrEmail !== "")
-                 return  new User();
-            const userLogin = await User.findOne({ where: {
-                [Op.or]: [
-                  { username: user.userNameOrEmail },
-                  { email: user.userNameOrEmail }
-                ]
-              }})
-            const isPasswordValid = bcrypt.compareSync(user.password, userLogin?.password || "");
-            if (!isPasswordValid) return new User();
-            return new User ;
-        }catch(error){
-            throw new Error("Method not implemented.");
-        }
-    }
-    
-}
+export default authRepository;

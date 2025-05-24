@@ -3,6 +3,7 @@ import Database from "./config/database";
 import ChatRouter from "./router/ChatRouter";
 import cors from "cors"; 
 import AuthRouters from "./router/AuthRouters";
+import session from 'express-session';
 
 class App {
   public app: Application;
@@ -22,6 +23,12 @@ class App {
         allowedHeaders: ["Content-Type", "Authorization"],
       })
     );
+    this.app.use(session({
+      secret: 'your-secret-key',
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: false } // Set to true if using HTTPS
+    }));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
   }

@@ -2,7 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import "./index.css"
 
 const Login: React.FC = () => {
+    const [UserNameorEmail, setUserNameorEmail] = useState('');
+      const [Password, setPassword] = useState('');
+
  
+  const Login = async () => {
+    if (!UserNameorEmail.trim() || !Password .trim()) return;
+
+  }
 
   return (
     <div className='wrapper'>
@@ -16,7 +23,7 @@ const Login: React.FC = () => {
               <p>Password</p>
               <input type='password' placeholder='input your password' />
           </div>
-          <button>Login</button>
+          <button onClick={()=>Login()}>Login</button>
       </div>
     </div>
     

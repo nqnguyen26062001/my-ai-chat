@@ -2,6 +2,8 @@ import { Model, Table, Column, DataType } from "sequelize-typescript";
 
 @Table({
   tableName: User.USER_TABLE_NAME,
+    timestamps: false,
+
 })
 export class User extends Model {
   public static USER_TABLE_NAME = "user" as string;
@@ -26,7 +28,7 @@ export class User extends Model {
   username!: string;
 
   @Column({
-    type: DataType.DATE,
+    type: DataType.STRING(500),
     field: User.EMAIL,
   })
   email!: Date;
