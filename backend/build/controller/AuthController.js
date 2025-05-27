@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const authRepository_1 = __importDefault(require("../repository/authRepository"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 class AuthController {
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -25,13 +24,42 @@ class AuthController {
                     throw new Error('User not found');
                 }
                 // Compare password
-                const isMatch = yield bcrypt_1.default.compare(password, user.password);
+                // const isMatch = await bcrypt.compare(password, user.password);
                 // if (!isMatch) {
                 //   throw new Error('Invalid password');
                 // }
+                req.session.userId = user.userId;
                 res.status(201).json({
                     message: "Login successful!",
-                    result: user
+                    result: req.session
+                });
+            }
+            catch (err) {
+                res.status(500).json({
+                    status: "Internal Server Error!",
+                    message: "Internal Server Error!",
+                });
+            }
+        });
+    }
+    logout(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userNameOrEmail, password, expires30day } = req.body;
+                // const user = await new AuthRepository().login(userNameOrEmail, password,expires30day);
+                const user = yield new authRepository_1.default().findUserByUsernameOrEmail(userNameOrEmail);
+                if (!user) {
+                    throw new Error('User not found');
+                }
+                // Compare password
+                // const isMatch = await bcrypt.compare(password, user.password);
+                // if (!isMatch) {
+                //   throw new Error('Invalid password');
+                // }
+                req.session.userId = user.userId;
+                res.status(201).json({
+                    message: "Login successful!",
+                    result: req.session
                 });
             }
             catch (err) {

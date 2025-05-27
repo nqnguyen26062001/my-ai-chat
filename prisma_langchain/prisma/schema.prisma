@@ -9,41 +9,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- Các models cho chatbot của bạn ---
+
 model User {
-  id        String    @id @default(uuid())
+  id        String    @id @default(uuid()) // UUID cho ID người dùng
   username  String    @unique
   email     String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  chats     Chat[]
- orders    Order[] 
+  chats     Chat[]    // Mối quan hệ 1-nhiều với Chat
+  orders    Order[]   // Mối quan hệ 1-nhiều với Order
 
-  @@map("users")
+  @@map("users") // Đặt tên bảng trong DB là 'users'
 }
 
 model Chat {
   id          String       @id @default(uuid())
   userId      String
   user        User         @relation(fields: [userId], references: [id])
-  title       String?
+  title       String?      // Tiêu đề cuộc trò chuyện (ví dụ: "Cuộc trò chuyện về đặt hàng")
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  messages    ChatMessage[]
+  messages    ChatMessage[] // Mối quan hệ 1-nhiều với ChatMessage
 
-  @@map("chats")
+  @@map("chats") // Đặt tên bảng trong DB là 'chats'
 }
 
 model ChatMessage {
   id        String   @id @default(uuid())
   chatId    String
   chat      Chat     @relation(fields: [chatId], references: [id])
-  sender    String
-  content   String   @db.Text
+  sender    String   // 'user' or 'ai'
+  content   String   @db.Text // Kiểu Text cho nội dung dài
   createdAt DateTime @default(now())
 
-  @@map("chat_messages")
+  @@map("chat_messages") // Đặt tên bảng trong DB là 'chat_messages'
 }
 
+// --- Ví dụ cho chức năng đặt hàng (Nếu bạn có) ---
 model Order {
   id         String    @id @default(uuid())
   userId     String

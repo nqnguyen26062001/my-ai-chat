@@ -8,6 +8,7 @@ const database_1 = __importDefault(require("./config/database"));
 const ChatRouter_1 = __importDefault(require("./router/ChatRouter"));
 const cors_1 = __importDefault(require("cors"));
 const AuthRouters_1 = __importDefault(require("./router/AuthRouters"));
+const express_session_1 = __importDefault(require("express-session"));
 class App {
     constructor() {
         this.app = (0, express_1.default)();
@@ -20,6 +21,12 @@ class App {
             origin: "http://localhost:3000", // or '*' to allow all origins
             methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             allowedHeaders: ["Content-Type", "Authorization"],
+        }));
+        this.app.use((0, express_session_1.default)({
+            secret: 'your-secret-key',
+            resave: false,
+            saveUninitialized: true,
+            cookie: { secure: false } // Set to true if using HTTPS
         }));
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));

@@ -4,13 +4,13 @@ import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 require('dotenv').config();
 
 // Access your API key (ensure it's set in your .env file)
-const GEMINI_API_KEY = "AIzaSyBdRzNn1rhmuy1mhWkmH0zBnueKN3Lt";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
   throw new Error('Gemini API key is missing. Please set GEMINI_API_KEY in your .env file');
 }
 
 // Initialize the Google Generative AI client
-const genAI = new GoogleGenerativeAI("AIzaSyBdRzNn1rhmuy1mhWkmH0zBnueKN3Lt");
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // Define the model you want to use
 const MODEL_NAME = "gemini-1.5-flash"; // A good balance of speed and capability
